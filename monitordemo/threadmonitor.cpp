@@ -3,11 +3,14 @@
 #include <DbgHelp.h>
 #include <process.h>
 #include "threadmonitor.h"
+#include "callstackdef.h"
+#include "stackwalkhelper.h"
 #include <iostream>
+#include <ctime>
 #define FREEZE_TIME 5000
 #define DETECT_TIME 1000
 typedef LRESULT(WINAPI* func_DispatchMessage)(_In_ CONST MSG*);
-func_DispatchMessage gOriginDispatchMessageW = ::DispatchMessageA;
+func_DispatchMessage gOriginDispatchMessageW = ::DispatchMessage;
 DWORD gMainThreadId = 0;
 HANDLE gMainThread = NULL;
 unsigned int gMsg[100];
@@ -219,6 +222,25 @@ LRESULT ThreadMonitor::process(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
                 //    PostMessageA(_hwnd, WM_QUIT, 0, 0);
                 //    return 0;
                 //}
+
+
+                callstack::StackWalkResult result;
+                time_t nowsecondes = time_t(0);
+                DWORD timePoint = nowsecondes;
+                if (StackWalkHelper::Instance()->stackWalkOtherThread(gMainThread, entryPointTime, _entryTimePoint, &result))
+                {
+                    result.timePoint = timePoint;
+                    result.blockTime = now - entryPointTime;
+                    result.message = message;
+                    std::string stackstring;
+                    for (int i = 0; i < result.allFrame.size(); i++) {
+                        stackstring.append(result.allFrame[i].ImageName);
+                        stackstring.append(std::to_string(result.allFrame[i].offset));
+                        stackstring.append("\r\n");
+                    }
+                    std::cout << "the stack size is:" << result.allFrame.size() << " stack is:" << std::endl;
+                    std::cout << stackstring;
+                }
 
                 SetTimer(_hwnd, 1, DETECT_TIME, NULL);
                 break;
