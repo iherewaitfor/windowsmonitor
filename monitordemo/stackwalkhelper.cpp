@@ -128,13 +128,11 @@ bool StackWalkHelper::stackWalkOtherThread(HANDLE hThread, unsigned int entryTim
     {
         if (_init == -1)
         {
-            //ReportFreqCtrl::Instance()->setForceNowAllow();
             return false;
         }
         _init = init();
         if (_init != 1)
         {
-            //ReportFreqCtrl::Instance()->setForceNowAllow();
             return false;
         }
     }
@@ -142,7 +140,6 @@ bool StackWalkHelper::stackWalkOtherThread(HANDLE hThread, unsigned int entryTim
     if (_stackWalkTimeout)
     {
         cout << "stackwalk timeout" << endl;
-        //ReportFreqCtrl::Instance()->setForceNowAllow();
         return false;
     }
 
@@ -157,9 +154,7 @@ bool StackWalkHelper::stackWalkOtherThread(HANDLE hThread, unsigned int entryTim
         cout << "offset empty" << endl;
         return false;
     }
-
     fillContent(offset, output);
-    //FillStackResult::fill(offset, output);
     cout << "fillContent complete" << endl;
 
     if (isPdbSig70Unknow(output))
@@ -167,7 +162,6 @@ bool StackWalkHelper::stackWalkOtherThread(HANDLE hThread, unsigned int entryTim
         cout << "pdbsig70 unknow" << endl;
         return false;
     }
-
     return true;
 }
 
