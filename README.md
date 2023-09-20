@@ -10,4 +10,9 @@
 源码位置[monitordemo](https://github.com/iherewaitfor/windowsmonitor/tree/main/monitordemo)
 # dumpdemo (to do)
 (to do)
+# dll inect(to do)
+dll注入，用于监控其他进程
+关键点：
+- CreateRemoteThread
+(to do )
 
