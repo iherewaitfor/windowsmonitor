@@ -14,5 +14,12 @@
 dll注入，用于监控其他进程
 关键点：
 - CreateRemoteThread
+- GetProcAddress
+  - virtualAllocEx
+  - VirtualFreeEx
+  - WriteProcessMemory
+  - ReadProcessMemory
+- kenerl32.dll
+  - LoadLibrary
 (to do )
 
